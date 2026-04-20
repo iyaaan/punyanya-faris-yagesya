@@ -1,0 +1,64 @@
+LN2-praktekLogisticRegression(1).ipynb
+
+#import libraries
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+
+#load dataset
+dataFrame = pd.read_csv("iris.csv")
+dataFrame.head(5)
+
+#check the data if there's a NaN value
+dataFrame.isna().values.any()
+
+#check the features
+print(dataFrame.dtypes)
+
+#prepare the training set
+X = dataFrame.iloc[:, :-1]
+y = dataFrame.iloc[:, -1]
+
+#plot the relation of each features to the target
+plt.xlabel("Features")
+plt.ylabel("Species")
+
+pltX = dataFrame.loc[:, "sepal_length"]
+pltY = dataFrame.loc[:, "species"]
+plt.scatter(pltX, pltY, color="blue", label="sepal_length")
+
+pltX = dataFrame.loc[:, "sepal_width"]
+pltY = dataFrame.loc[:, "species"]
+plt.scatter(pltX, pltY, color="green", label="sepal_width")
+
+pltX = dataFrame.loc[:, "petal_length"]
+pltY = dataFrame.loc[:, "species"]
+plt.scatter(pltX, pltY, color="red", label="petal_length")
+
+pltX = dataFrame.loc[:, "petal_width"]
+pltY = dataFrame.loc[:, "species"]
+plt.scatter(pltX, pltY, color="black", label="petal_width")
+
+#split the data into 80% training and 20% testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+
+#train the model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+
+#test the model
+predictions = model.predict(X_test)
+print(predictions)
+
+
+print()
+
+
+#check precision, recall, f1-score
+print(classification_report(y_test, predictions))
+print("accuracy: ", accuracy_score(y_test, predictions))
